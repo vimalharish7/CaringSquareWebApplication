@@ -1,0 +1,34 @@
+﻿@model CaringSquareApp.Models.SocialEvent
+
+@{
+    ViewBag.Title = "Delete Social Event";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up" style="padding:0px">
+            </div>
+            <div class="section-title" data-aos="fade-up" style="">
+                <p class="main_name">Are you sure you want to delete this event?</p>
+                <h5>
+                    <br />
+                    <b>@Html.DisplayFor(model => model.EventName)</b><br />
+                </h5>
+                <h6>
+                    <i class="ri-map-pin-2-fill"></i> - @Html.DisplayFor(model => model.POIs.Name)<br />
+                    <i class="ri-calendar-2-fill"></i> - @Html.DisplayFor(model => model.EventDate) - @Html.DisplayFor(model => model.EventTime)
+                </h6>
+                <br />
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color">
+                        <input style="font-weight:bold;" type="submit" value="Delete" class="btn btn-danger" />
+                        <a style="font-weight:bold;" href="/SocialEvents/" class="btn btn-success">Back</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>

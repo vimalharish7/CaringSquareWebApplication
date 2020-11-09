@@ -1,0 +1,82 @@
+﻿@model CaringSquareApp.Models.SocialEvent
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<div class="container">
+    <h2>Details</h2>
+
+    <div>
+        <h4>SocialEvent</h4>
+        <hr />
+        <dl class="dl-horizontal" id="detailslist">
+            <dt>
+                @Html.DisplayNameFor(model => model.EventName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.EventName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.EventDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.EventDate)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.EventTime)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.EventTime)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.AspNetUser.Email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.AspNetUser.Email)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.POIs.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.POIs.Name)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.EventId }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+
+    <h2>Facilities near the Location</h2>
+    <div class="col-md-3">
+        <strong>Find Public Toilets near me </strong>
+        <p><a class="btn btn-primary btn-lg" href="/Interests" disabled="disabled">Find Public Toilets &raquo;</a></p>
+    </div>
+    <div class="col-md-3">
+        <strong>Find Water Fountains near me</strong>
+        <p><a class="btn btn-primary btn-lg" href="/FriendLists" disabled="disabled">Find Water Fountains &raquo;</a></p>
+    </div>
+    <div class="col-md-3">
+        <strong>Find Bus Stops near me</strong>
+        <p><a class="btn btn-primary btn-lg" href="/SocialEvents" disabled="disabled">Find Bus Station &raquo;</a></p>
+    </div>
+    <div class="col-md-3">
+        <strong>Find Parking Spots near me</strong>
+        <p><a class="btn btn-primary btn-lg" href="/Participants" disabled="disabled">Find Parking &raquo;</a></p>
+    </div>
+</div>

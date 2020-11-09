@@ -1,0 +1,95 @@
+﻿@model IEnumerable<CaringSquareApp.Models.SocialEvent>
+
+@{
+    ViewBag.Title = "Social Events";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section>
+    <div class="container">
+        <div class="section-title aos-init aos-animate" style="margin-bottom:-20px;" data-aos="fade-up">
+            <p>Social Events</p>
+            <h2>Create and Share your Social Events</h2>
+        </div>
+        <hr>
+        <div class="text-center text-lg-left row">
+            <h5 style="font-weight:bold;margin-bottom:20px;">
+            </h5>
+            <a href="/SocialEvents/Create" class="btn" style="margin-left:20px;background-color: #94d16a;font-weight:bold;"> <i class="ri-add-line"></i>  Create Social Event</a>
+            <h2 style="font-size: 12px;color:#010483;font-weight:bold;padding: 0;line-height: 1px;margin-left:15px;margin-top:10px;text-transform: uppercase;"><i class="fas fa-info-circle" style="color:#010483;font-size: 1.4em;margin-right:3px;"></i>Click here to create a New Event</h2>
+        </div>
+        <div id="spaceForAlert">
+
+        </div>
+        <table class="table" id="myTable">
+            <thead hidden>
+                <tr>
+                    <th style="width:90%">
+                        @Html.DisplayNameFor(model => model.EventName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EventDate)
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="width:70%;">
+                            <b>@Html.DisplayFor(modelItem => item.EventName)</b><br />
+                            <i class="ri-map-2-fill"></i>  :  @Html.DisplayFor(modelItem => item.POIs.Name)<br />
+                            <i class="ri-calendar-2-fill"></i> :  @Html.DisplayFor(modelItem => item.EventDate) -  @Html.DisplayFor(modelItem => item.EventTime)<br />
+
+                        </td>
+                        <td hidden>
+                            @Html.DisplayFor(modelItem => item.EventDate)
+                        </td>
+
+                        <td>
+                            <a href="/SocialEvents/Edit/@item.EventId" style="font-weight:bold"><i class="ri-pencil-fill"></i> Edit</a> |
+                            <a href="/SocialEvents/Details/@item.EventId" style="font-weight:bold"><i class="ri-share-fill"></i> Share</a> |
+                            <a href="/SocialEvents/Delete/@item.EventId" style="font-weight:bold"><i class="ri-delete-bin-2-fill"></i> Delete</a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+    <script>
+        window.onload = function () {
+            var place = new URL(location.href).searchParams.get('Success');
+            if (place != null) {
+                var alertStr = '';
+                if (place == 'Create') {
+                    alertStr = 'Event Created Successfully';
+                }
+                if (place == 'Edit') {
+                    alertStr = 'Event Edited Successfully';
+                }
+                if (place == 'Delete') {
+                    alertStr = 'Event Deleted Successfully';
+                }
+                var str = ` <br/><div class="alert alert-success alert-dismissible fade show" role="alert">`;
+
+                str += alertStr + `<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>`;
+                $('#spaceForAlert').html(str);
+            }
+
+            $('#myTable').DataTable({
+                "bLengthChange": false,
+                "bInfo": false,
+                "order": [[1, "desc"]]
+
+            });
+        };
+
+    </script>
+

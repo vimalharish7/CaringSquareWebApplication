@@ -1,0 +1,270 @@
+﻿@model CaringSquareApp.Models.POIs
+
+@{
+ViewBag.Title = "Details";
+Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact">
+        <div class="container">
+
+            <div class="section-title" data-aos="fade-up">
+                <h2>Name of Place</h2>
+                <p >@Html.DisplayFor(model => model.Name)</p>
+                <h5>@Html.DisplayFor(model => model.SubTheme)</h5>
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-5" data-aos="fade-right" data-aos-delay="100">
+                    <div class="info">
+                        <div class="address">
+                            <i class="ri-map-pin-2-fill"></i>
+                            <h4>Address:</h4>
+                            <p style="color: #444"><b>@Html.DisplayFor(model => model.Address)</b></p>
+                            <p hidden class="main_lat">@Html.DisplayFor(model => model.Latitude)</p>
+                            <p hidden class="main_lon">@Html.DisplayFor(model => model.Longitude)</p>
+                        </div>
+
+                        <div class="email">
+                            <i class="ri-heart-fill"></i>
+                            <h4>Category:</h4>
+                            <p style="color: #444"><b>@Html.DisplayFor(model => model.Category)</b></p>
+
+                        </div>
+                        <br /><br />
+
+                        <h6 id="freshtitle">Nearby Facilities:</h6>
+                        <div class="coordinates">
+                            <div class="phone">
+                                <i class="fas fa-toilet"></i>
+                                <h4>Toilets:</h4>
+
+                                @foreach (var item in Model.PublicToilets)
+                                {
+                                    var feature_name = item.Name.Split(new[] { '-' }, 2);
+                                    var final_name = "";
+                                    if (feature_name[0] == "Public Toilet ")
+                                    {
+                                        if (feature_name[1].StartsWith(" Toile"))
+                                        {
+                                            var feature_name_split = feature_name[1].Split(new[] { '-' }, 2);
+                                            final_name = feature_name_split[1];
+                                        }
+                                        else
+                                        {
+                                            final_name = feature_name[1];
+                                        }
+                                        <div class="coordinates">
+                                            <p>
+                                                @if (item.Accessibility == "yes")
+                                                {
+                                                    <span style="display:inline; color:green" class="fas fa-wheelchair"></span>
+
+                                                }
+                                                else
+                                                {
+                                                    <span style="display:inline; color:white" class="fas fa-wheelchair"></span>
+
+                                                }
+
+                                                @final_name
+                                            </p>
+                                            <p hidden class="toilet_name">T- @final_name </p>
+                                            <p hidden class="latitude">@item.Latitude</p>
+                                            <p hidden class="longitude"> @item.Longitude</p>
+                                        </div>
+                                    }
+
+
+                                }
+                            </div>
+                            <div class="phone">
+                                <i class="ri-drop-fill"></i>
+                                <h4>Water Fountains:</h4>
+                                @foreach (var item in Model.PublicToilets)
+                                {
+                                    var feature_name = item.Name.Split(new[] { '-' }, 2);
+                                    var final_name = "";
+                                    if (feature_name[0] != "Public Toilet ")
+                                    {
+                                        final_name = feature_name[1];
+                                        <div class="coordinates">
+                                            <p><span style="display:inline; color:green" class="fas fa-caret-right"></span>@final_name</p>
+                                            <p hidden class="toilet_name">W- @final_name </p>
+                                            <p hidden class="latitude">@item.Latitude</p>
+                                            <p hidden class="longitude"> @item.Longitude</p>
+                                        </div>
+                                    }
+
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-7 mt-5 mt-lg-0" data-aos="fade-left" data-aos-delay="200">
+                    <div id="map" style="height:300px"></div>
+                </div>
+
+
+            </div>
+            <br /><br />
+            @if (User.Identity.IsAuthenticated)
+            {
+
+                <a href="/SocialEvents/Create?place=@Html.DisplayFor(model => model.PlaceId)" class="btn" style="background-color: #94d16a; margin-left:10px;font-weight:bold;">Create Event</a>
+            }
+            else
+            {
+                <a href="/POIs/Login?place=@Html.DisplayFor(model => model.PlaceId)" class="btn" style="background-color: #94d16a; margin-left:10px;font-weight:bold;">Create Event</a>
+            }
+            <a href="/POIs" class="btn" style="color:#010483;background-color: #f7f7f7;border-color:#000000; margin-left:10px;font-weight:bold;">Back to List</a>
+
+        </div>
+    
+    </section><!-- End Contact Section -->
+
+
+
+
+<script>
+    window.onload = function () {
+        /**
+    * This is a simple JavaScript demonstration of how to call MapBox API to load the maps.
+    * I have set the default configuration to enable the geocoder and the navigation control.
+    * https://www.mapbox.com/mapbox-gl-js/example/popup-on-click/
+    * Copyrights Holder - Credits for the code
+    * author Jian Liew <jian.liew@monash.edu>
+    */
+    const TOKEN = "pk.eyJ1IjoiaGFyaXNoMTE1MCIsImEiOiJjazFndDJxMHMwMXBtM2JqdWNqMmpkdWozIn0.yspP5Uu6LV65-0HgIpNVUw";
+    var locations = [];
+        // The first step is obtain all the latitude and longitude from the HTML
+        // The below is a simple jQuery selector
+        $(".coordinates").each(function () {
+            var longitude = $(".longitude", this).text().trim();
+            var latitude = $(".latitude", this).text().trim();
+            var description_obj = $(".toilet_name", this).text().trim().split(/-(.+)/);
+            var description = description_obj[1];
+            var item_icon = "circle-15";
+            if (description_obj[0] == "W") {
+                item_icon = "drinking-water-15";
+            }
+            else if (description_obj[0] == "T") {
+                item_icon = "toilet-15";
+            }
+            // Create a point data structure to hold the values.
+            var point = {
+                "latitude": latitude,
+                "longitude": longitude,
+                "description": description,
+                "item_icon": item_icon
+            };
+            // Push them all into an array.
+            locations.push(point);
+        });
+
+        var sum_lat = 0;
+        var sum_lon = 0;
+
+        for (var i = 0; i < locations.length; i++) {
+            sum_lat += parseFloat(locations[i].latitude, 10);
+            sum_lon += parseFloat(locations[i].longitude, 10);
+        };
+        var map_center_lat = parseFloat(sum_lat / locations.length)
+        var map_center_lon = parseFloat(sum_lon / locations.length)
+
+        var data = [];
+
+
+        for (i = 0; i < locations.length; i++) {
+            var feature = {
+                "type": "Feature",
+                "properties": {
+                    "description": locations[i].description,
+                    "icon": locations[i].item_icon
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [locations[i].longitude, locations[i].latitude]
+                }
+            };
+            data.push(feature)
+
+        }
+        // Add the POI
+        var main_feature = {
+            "type": "Feature",
+            "properties": {
+                "description": $(".main_name").text(),
+                "icon": "circle-15"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [$(".main_lon").text(), $(".main_lat").text()]
+            }
+        };
+        data.push(main_feature);
+
+
+        mapboxgl.accessToken = TOKEN;
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v10',
+            zoom: 14,
+            center: [map_center_lon, map_center_lat]
+        });
+        map.on('load', function () {
+            // Add a layer showing the places.
+            map.addLayer({
+                "id": "places",
+                "type": "symbol",
+                "source": {
+                    "type": "geojson",
+                    "data": {
+                        "type": "FeatureCollection",
+                        "features": data
+                    }
+                },
+                "layout": {
+                    "icon-image": "{icon}",
+                    "icon-allow-overlap": true
+                }
+            });
+
+            map.addControl(new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken
+            }));;
+            map.addControl(new mapboxgl.NavigationControl());
+            // When a click event occurs on a feature in the places layer, open a popup at the
+            // location of the feature, with description HTML from its properties.
+            map.on('click', 'places', function (e) {
+
+                var coordinates = e.features[0].geometry.coordinates.slice();
+                var description = e.features[0].properties.description;
+
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+                new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(description)
+                .addTo(map);
+            });
+            // Change the cursor to a pointer when the mouse is over the places layer.
+            map.on('mouseenter', 'places', function () {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+            // Change it back to a pointer when it leaves.
+            map.on('mouseleave', 'places', function () {
+                map.getCanvas().style.cursor = '';
+            });
+        });
+    }
+</script>

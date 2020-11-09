@@ -1,0 +1,98 @@
+@model IEnumerable<CaringSquareApp.Models.POIs>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<br />
+<br />
+<br />
+<div class="container">
+    <h2>List of Attractions around Melbourne CBD</h2>
+    <div id="map" style="height:300px"></div>
+    <br />
+    <br />
+
+    <div class="text-center text-lg-left">
+        <h6 style:"font-weight: bold;"">Choose a Different Category:<a href="/POIs/Category" class="btn" style="background-color: #94d16a; margin-left:10px;">Go Back</a></h6>
+    </div>
+
+    <table class="table" id="myTable">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SubTheme)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+
+                <th style="display: none;">
+                    @Html.DisplayNameFor(model => model.Latitude)
+                </th>
+                <th style="display: none;">
+                    @Html.DisplayNameFor(model => model.Longitude)
+                </th>
+
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+
+                <tr class="coordinates">
+                    <td class="description">
+                        @Html.DisplayFor(modelItem => item.Name)
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SubTheme)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+
+                    <td class="latitude" style="display: none;">
+                        @Html.DisplayFor(modelItem => item.Latitude)
+                    </td>
+                    <td class="longitude" style="display: none;">
+                        @Html.DisplayFor(modelItem => item.Longitude)
+                    </td>
+
+
+                    <td>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @Html.ActionLink("Details", "Details", new { id = item.PlaceId, style = "font-weight: bold;" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Create Event", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+                        }
+
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+
+    </table>
+</div>
+
+<script>
+    window.onload = function () {
+        $('#myTable').DataTable();
+        $('#myTable tbody tr:even').css('background-color', '#94d16a');
+    };
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/mapbox")
+}

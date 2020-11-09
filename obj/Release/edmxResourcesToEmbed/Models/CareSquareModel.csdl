@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="AspNetUser">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+    <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="FriendLists" Relationship="Self.FK_UserFriendList" FromRole="AspNetUsers" ToRole="FriendLists" />
+    <NavigationProperty Name="Interests" Relationship="Self.FK_UserInterestList" FromRole="AspNetUsers" ToRole="Interests" />
+    <NavigationProperty Name="SocialEvents" Relationship="Self.FK_UserSocialEvent" FromRole="AspNetUsers" ToRole="SocialEvents" />
+    <NavigationProperty Name="Participants" Relationship="Self.FK_UsersParticipant" FromRole="AspNetUsers" ToRole="Participants" />
+  </EntityType>
+  <EntityType Name="FriendList">
+    <Key>
+      <PropertyRef Name="FriendId" />
+    </Key>
+    <Property Name="FriendId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="AspNetUser" Relationship="Self.FK_UserFriendList" FromRole="FriendLists" ToRole="AspNetUsers" />
+  </EntityType>
+  <EntityType Name="Interest">
+    <Key>
+      <PropertyRef Name="InterestId" />
+    </Key>
+    <Property Name="InterestId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="InterestName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UserUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="AspNetUser" Relationship="Self.FK_UserInterestList" FromRole="Interests" ToRole="AspNetUsers" />
+  </EntityType>
+  <EntityType Name="Participant">
+    <Key>
+      <PropertyRef Name="ParticipantId" />
+    </Key>
+    <Property Name="ParticipantId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="SocialEventEventId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="AspNetUser" Relationship="Self.FK_UsersParticipant" FromRole="Participants" ToRole="AspNetUsers" />
+    <NavigationProperty Name="SocialEvent" Relationship="Self.FK_SocialEventParticipant" FromRole="Participants" ToRole="SocialEvents" />
+  </EntityType>
+  <EntityType Name="POIs">
+    <Key>
+      <PropertyRef Name="PlaceId" />
+    </Key>
+    <Property Name="PlaceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Theme" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="SubTheme" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Latitude" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Longitude" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Category" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="PublicToilets" Relationship="Self.FK_POIPublicToilet" FromRole="POIs" ToRole="PublicToilets" />
+    <NavigationProperty Name="SocialEvents" Relationship="Self.FK_POISocialEvent" FromRole="POIs" ToRole="SocialEvents" />
+  </EntityType>
+  <EntityType Name="PublicToilet">
+    <Key>
+      <PropertyRef Name="ToiletId" />
+    </Key>
+    <Property Name="ToiletId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FemaleStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="MaleStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Accessibility" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Latitude" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Longitude" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="POIPlaceId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="POIs" Relationship="Self.FK_POIPublicToilet" FromRole="PublicToilets" ToRole="POIs" />
+  </EntityType>
+  <EntityType Name="SocialEvent">
+    <Key>
+      <PropertyRef Name="EventId" />
+    </Key>
+    <Property Name="EventId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EventName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="EventDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="EventTime" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="UserUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="POIPlaceId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="AspNetUser" Relationship="Self.FK_UserSocialEvent" FromRole="SocialEvents" ToRole="AspNetUsers" />
+    <NavigationProperty Name="Participants" Relationship="Self.FK_SocialEventParticipant" FromRole="SocialEvents" ToRole="Participants" />
+    <NavigationProperty Name="POIs" Relationship="Self.FK_POISocialEvent" FromRole="SocialEvents" ToRole="POIs" />
+  </EntityType>
+  <Association Name="FK_UserFriendList">
+    <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1" />
+    <End Role="FriendLists" Type="Self.FriendList" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="FriendLists">
+        <PropertyRef Name="UserUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserInterestList">
+    <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1" />
+    <End Role="Interests" Type="Self.Interest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Interests">
+        <PropertyRef Name="UserUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserSocialEvent">
+    <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1" />
+    <End Role="SocialEvents" Type="Self.SocialEvent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SocialEvents">
+        <PropertyRef Name="UserUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsersParticipant">
+    <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1" />
+    <End Role="Participants" Type="Self.Participant" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Participants">
+        <PropertyRef Name="UserUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SocialEventParticipant">
+    <End Role="SocialEvents" Type="Self.SocialEvent" Multiplicity="1" />
+    <End Role="Participants" Type="Self.Participant" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SocialEvents">
+        <PropertyRef Name="EventId" />
+      </Principal>
+      <Dependent Role="Participants">
+        <PropertyRef Name="SocialEventEventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_POIPublicToilet">
+    <End Role="POIs" Type="Self.POIs" Multiplicity="1" />
+    <End Role="PublicToilets" Type="Self.PublicToilet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="POIs">
+        <PropertyRef Name="PlaceId" />
+      </Principal>
+      <Dependent Role="PublicToilets">
+        <PropertyRef Name="POIPlaceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_POISocialEvent">
+    <End Role="POIs" Type="Self.POIs" Multiplicity="1" />
+    <End Role="SocialEvents" Type="Self.SocialEvent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="POIs">
+        <PropertyRef Name="PlaceId" />
+      </Principal>
+      <Dependent Role="SocialEvents">
+        <PropertyRef Name="POIPlaceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CaringSquareEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
+    <EntitySet Name="FriendLists" EntityType="Self.FriendList" />
+    <EntitySet Name="Interests" EntityType="Self.Interest" />
+    <EntitySet Name="Participants" EntityType="Self.Participant" />
+    <EntitySet Name="POIs" EntityType="Self.POIs" />
+    <EntitySet Name="PublicToilets" EntityType="Self.PublicToilet" />
+    <EntitySet Name="SocialEvents" EntityType="Self.SocialEvent" />
+    <AssociationSet Name="FK_UserFriendList" Association="Self.FK_UserFriendList">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="FriendLists" EntitySet="FriendLists" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserInterestList" Association="Self.FK_UserInterestList">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Interests" EntitySet="Interests" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserSocialEvent" Association="Self.FK_UserSocialEvent">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="SocialEvents" EntitySet="SocialEvents" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UsersParticipant" Association="Self.FK_UsersParticipant">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Participants" EntitySet="Participants" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SocialEventParticipant" Association="Self.FK_SocialEventParticipant">
+      <End Role="SocialEvents" EntitySet="SocialEvents" />
+      <End Role="Participants" EntitySet="Participants" />
+    </AssociationSet>
+    <AssociationSet Name="FK_POIPublicToilet" Association="Self.FK_POIPublicToilet">
+      <End Role="POIs" EntitySet="POIs" />
+      <End Role="PublicToilets" EntitySet="PublicToilets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_POISocialEvent" Association="Self.FK_POISocialEvent">
+      <End Role="POIs" EntitySet="POIs" />
+      <End Role="SocialEvents" EntitySet="SocialEvents" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

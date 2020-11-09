@@ -1,0 +1,48 @@
+﻿@model CaringSquareApp.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+
+<div class="container">
+    <section id="registerForm">
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", style = "" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <h2 id="freshtitle">Create a new account.</h2>
+            <hr />
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label", style = "font-weight: bold;" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "eg. abc@gmail.com" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label", style = "font-weight: bold;" })
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                </div>
+                <div class="col-md-10">
+
+                    <p><i class="ri-information-line" style="color:#010483;font-size: 1.4em;"></i>Password must have one uppercase, one lowercase, one number and one special character.</p>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label", style = "font-weight: bold;" })
+                <div class="col-md-10">
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input style="background-color:#94d16a;font-weight:bold;color:#000000" type="submit" id="buttonedit" class="btn-get-started scrollto" value="Register" />
+                </div>
+            </div>
+        }
+        </section>
+</div>
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

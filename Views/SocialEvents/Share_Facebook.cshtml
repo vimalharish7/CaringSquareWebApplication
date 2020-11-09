@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "Share on Facebook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Microsoft.AspNet.Identity
+
+    <section>
+        <div class="container">
+            @if (Request.IsAuthenticated)
+            {
+                <div>
+                    <h2 id="freshtitle">Share on Facebook</h2>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <h2 id="freshtitle">Event Details</h2>
+                </div>
+            }
+            <br />
+
+            <style>
+                .button {
+                    background-color: #4CAF50;
+                    border: none;
+                    color: white;
+                    padding: 15px 32px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-size: 16px;
+                    margin: 4px 2px;
+                    cursor: pointer;
+                }
+            </style>
+            @if (Request.IsAuthenticated)
+            {
+                <div id="fb-root"></div>
+                <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v7.0&appId=576187129689734&autoLogAppEvents=1"></script>
+
+                <div class="fb-share-button" data-href=" " data-layout="button" data-size="large" style="align-content:center;">
+                    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">
+                        Facebook Share
+                    </a>
+                </div>
+                <br />
+                <br />
+
+
+            }
+            <strong id="Contents">
+            </strong>
+            @if (Request.IsAuthenticated)
+            {
+                <div>
+                    @Html.ActionLink("Back to Event List Page", "Index", new { }, new { @class = "btn", @style = "color:#010483;background-color: #f7f7f7; border-color:#000000;font-weight:bold;" })
+
+                </div>
+            }
+
+
+        </div>
+        </section>
+        <script>
+            window.onload = function () {
+                shareFacebook();
+
+            }
+            function init() {
+                var result = document.getElementById('Contents');
+                var text = "";
+                try {
+                    var sp = new URL(location.href);
+                    var decode = atob(sp.searchParams.get('data'));
+                    var textArray = JSON.parse(decode);
+
+                    textArray = textArray[0].split('\n').map(g => g.trim()).filter(Boolean);
+
+
+                    for (var i = 0; i < textArray.length; i += 2) {
+                        text += `<div><h4 style="font-size: 22px;font-weight: 600;color: #010483;">${textArray[i]} : <h4 style="font-size: 18px;font-weight: 500;margin-bottom: 3px;color: #010101;font-weight:bold;"> ${textArray[i + 1]} </h4><br/>\n`
+
+                    }
+                } catch (err) {
+                }
+
+                result.innerHTML += `\n ${text}`
+
+            }
+
+
+            window.addEventListener('DOMContentLoaded', event => {
+                init();
+            });
+
+            function shareFacebook() {
+
+                var x = document.URL;
+                $('.fb-share-button').attr("data-href", x);
+                document.getElementById("url").content = x;
+
+            }
+        </script>
+
+
+

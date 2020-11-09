@@ -1,0 +1,301 @@
+﻿@model IEnumerable<CaringSquareApp.Models.POIs>
+
+@{
+    ViewBag.Title = "Explore Places";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .uppercase {
+    text-transform: uppercase;
+}
+.new-Button {
+    box-shadow: -3px 3px #dee1e3, -2px 2px orange, -1px 1px orange;
+    border: 1px solid grey;
+}
+</style>
+
+<section id="pricing" class="pricing">
+    <div class="container">
+        <h2 id="freshtitle">List of Attractions around Melbourne CBD</h2>
+        <br />
+        <div id="map" style="height:300px"></div>
+        <br />
+        <br />
+
+        <div class="row" data-aos="fade-left">
+
+            <div class="col-lg-3 col-md-12">
+                <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                    <h3 style="font-weight:bold">
+                        Filter Places List:
+                    </h3>
+                    <div class="text-center text-lg-left">
+                        <h5 style="font-weight:bold;margin-bottom:20px;">
+                            Search:
+                        </h5>
+                    </div>
+                    <div id="filter">
+                        <b>Find Place Name:</b>
+                        <input class="column_filter form-control" id="searchName" placeholder="Zoo, Eureka, etc" />
+                        <br />
+                        <b>Find Street Name:</b>
+                        <input class="column_filter form-control" id="searchStreetName" placeholder="Bourke St, Swanston st,etc" />
+                        <br />
+                    </div>
+                    <hr />
+                    <div class="text-center text-lg-left">
+                        <h5 style="font-weight:bold;margin-bottom:20px;">
+                            Filter by Interest:
+                        </h5>
+                    </div>
+                    <div class="form-check form-check-inline" style="text-align:left">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="cinema" name="category1">
+                        <label class="form-check-label" for="inlineCheckbox1"><strong><i class="fas fa-film"></i> Cinema</strong></label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="shopping" name="category2">
+                        <label class="form-check-label" for="inlineCheckbox2"><strong><i class="fas fa-shopping-bag"></i> Shopping</strong></label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="sport" name="category3">
+                        <label class="form-check-label" for="inlineCheckbox3"><strong><i class="fas fa-basketball-ball"></i> Sports </strong></label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="hangout" name="category4">
+                        <label class="form-check-label" for="inlineCheckbox4"><strong><i class="fas fa-glass-cheers"></i> Hangout</strong></label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="religious" name="category5">
+                        <label class="form-check-label" for="inlineCheckbox5"><strong><i class="fas fa-church"></i> Religious</strong></label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox6" value="museum" name="category6">
+                        <label class="form-check-label" for="inlineCheckbox6"><strong><i class="fas fa-landmark"></i> Museum</strong></label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox7" value="park" name="category7">
+                        <label class="form-check-label" for="inlineCheckbox7"><strong><i class="fas fa-tree"></i>  Parks  Area</strong></label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox8" value="library" name="category8">
+                        <label class="form-check-label" for="inlineCheckbox8"><strong><i class="fas fa-book"></i> Library</strong></label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox9" value="bbq" name="category9">
+                        <label class="form-check-label" for="inlineCheckbox9"><strong><i class="fas fa-hamburger"></i> Barbecue</strong></label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox10" value="pet" name="category10">
+                        <label class="form-check-label" for="inlineCheckbox10"><strong><i class="fas fa-dog"></i> Pet Friendly</strong></label>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+
+
+
+                    <!--@using (Html.BeginForm("AdvancedSearch", "POIs", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="text-center text-lg-left">
+                    <h5 style="font-weight:bold;margin-bottom:15px;margin-top:15px;">
+                        Search for Places of Interest:
+                    </h5>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input class="form-control" id="PlaceName" name="PlaceName" placeholder="Enter a Place name eg. Eureka, Zoo, Garden" type="text" />
+                    </div>
+                    <h5 style="margin-top:5px;">OR</h5>
+                    <div class="col">
+                        <input class="form-control" id="StreetName" name="StreetName" placeholder="Enter a Street name eg. Bourke St, Swanston St" type="text" />
+                    </div>
+                </div>
+
+                <input class="btn btn-default" style="background-color: #94d16a;margin-top:20px;margin-bottom:15px; color: #000000;font-weight:bold;" type="submit" value="Search" />
+            }-->
+                    <input class="column_filter form-control" id="searchCategory" hidden />
+                </div>
+            </div>
+            
+            <div class="col-lg-9 col-md-12">
+                <h2 style="font-size: 12px;color:#010483;font-weight:bold;padding: 0;line-height: 1px;margin-bottom:20px;text-transform: uppercase;"><i class="fas fa-info-circle" style="color:#010483;font-size: 1.4em;margin-right:3px;"></i>Explore places below to Find the one you like and create an event</h2>
+                <table class="display " id="myTable" style="width:100%">
+
+                    <thead>
+                        <tr>
+                            <th hidden>
+                            </th>
+                            <th hidden>
+                            </th>
+                            <th hidden>
+                            </th>
+                            <th style="width:400px;">
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th hidden>
+                                @Html.DisplayNameFor(model => model.Latitude)
+                            </th>
+                            <th hidden>
+                                @Html.DisplayNameFor(model => model.Longitude)
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.Category)
+                            </th>
+                            <th> Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+
+
+                            <tr class="coordinates" date-type="@(item.Category)">
+                                <td class="description" hidden>
+                                    @Html.DisplayFor(modelItem => item.Name)
+
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.SubTheme)
+
+                                </td>
+                                <td hidden>
+                                    @Html.DisplayFor(modelItem => item.Address)
+
+                                </td>
+                                <td>
+                                    <strong style="font-size:1.2em">@Html.DisplayFor(modelItem => item.Name)</strong> <br />
+                                    <i class="ri-information-line"></i>  @Html.DisplayFor(modelItem => item.SubTheme) <br />
+                                    <i class="ri-map-pin-2-fill"></i>  @Html.DisplayFor(modelItem => item.Address) <br /><br />
+                                </td>
+
+                                <td class="latitude" hidden>
+                                    @Html.DisplayFor(modelItem => item.Latitude)
+                                </td>
+                                <td class="longitude" hidden>
+                                    @Html.DisplayFor(modelItem => item.Longitude)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Category).ToString().ToUpperInvariant()
+                                </td>
+                                <td>
+                                    <a href="/POIs/Details/@item.PlaceId" style="background-color: #94d16a;color: #111111;font-weight:bold;margin-bottom:10px; border-radius:50px" class="btn btn-default new-Button"><i class="fas fa-plus-square"></i> Create Event</a>
+                                    <a style="background-color: #f7f7f7;color: #010483;font-weight:bold;  border-radius:50px" class=" btn new-Button"
+                                       onclick="pinOnMap('@Html.DisplayFor(modelItem => item.Latitude)','@Html.DisplayFor(modelItem => item.Longitude)','<strong>Name:</strong>@Html.DisplayFor(modelItem => item.Name)<br/> <strong>Theme:</strong> @Html.DisplayFor(modelItem => item.SubTheme)<br/> <strong>Address:</strong> @Html.DisplayFor(modelItem => item.Address)')"><i class="fas fa-map-marked-alt"></i> View on Map</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+
+                </table>
+            </div>
+        </div>
+        </div>
+</section>
+<script>
+    var prevMapbox = null;
+    function filterColumn() {
+        $('#myTable').DataTable().column(6).search(
+            $('#searchCategory').val(), true, false
+        ).draw();
+    }
+
+    function filterColumnName() {
+        $('#myTable').DataTable().column(0).search(
+            $('#searchName').val(), true, false
+        ).draw();
+    }
+    function filterColumnStreetName() {
+        $('#myTable').DataTable().column(2).search(
+            $('#searchStreetName').val(), true, false
+        ).draw();
+    }
+
+    window.onload = function () {
+        var yourArray = [];
+        $('input.form-check-input').on('keyup click', function () {
+            yourArray = [];
+            $("input.form-check-input:checked").each(function () {
+                yourArray.push($(this).val());
+            });
+
+            var element = document.getElementById("searchCategory");
+            document.getElementById("searchCategory").value = yourArray.join('|');
+            var event = new Event('change');
+            element.dispatchEvent(event);
+        });
+
+
+        var table = $('#myTable').DataTable({
+            rowReorder: {
+                selector:'td:nth-child(2)'
+            },
+            responsive: true,
+            initComplete: function () {
+
+                // Apply the search
+                this.api().columns().every(function () {
+                    var that = this;
+
+                    $('input.column_filter').on('keyup change', function () {
+                        filterColumn();
+                        filterColumnName();
+                        filterColumnStreetName();
+                    });
+                });
+            }
+        });
+
+
+        $('#categories-form').on('submit', event => {
+            event.preventDefault();
+
+            var selectedValues = $(event.target).serializeArray().map(el => el.name);
+
+            table.destroy();
+
+            $(`#myTable tr[data-type="cinema"] `).hide();
+
+        })
+
+
+    };
+
+    function pinOnMap(lat, lon, desc) {
+        //var elementExists = document.getElementById("find-me");
+        var trsText = Array.from($(this).closest('tr').find('td').map((i, el) => $(el).text().trim()).slice(0, 3));
+        var loc = { longitude: lon, latitude: lat, description: desc };
+
+        prevMapbox?.remove()
+
+        map.flyTo({
+            zoom: 16,
+            center: [
+                loc.longitude,
+                loc.latitude
+            ],
+            essential: true // this animation is considered essential with respect to prefers-reduced-motion
+        });
+
+        var coordinates = [loc.longitude, loc.latitude];
+
+        var mapboxHTML = `<p>${loc.description}</p>`;
+
+        prevMapbox = new mapboxgl.Popup()
+
+        prevMapbox.setLngLat(coordinates)
+            .setHTML(mapboxHTML)
+            .addTo(map);
+
+        $('html,body').animate({ scrollTop: 0 })
+    }
+
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/mapbox")
+}

@@ -1,0 +1,35 @@
+﻿@model CaringSquareApp.Models.Interest
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Interest</h4>
+    <hr />
+    <dl class="dl-horizontal"  id="detailslist">
+        <dt>
+            @Html.DisplayNameFor(model => model.InterestName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InterestName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AspNetUser.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AspNetUser.Email)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.InterestId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

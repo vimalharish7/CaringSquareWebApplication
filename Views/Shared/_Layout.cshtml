@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Caring Square</title>
+    <link rel="icon" href="~/CaringSquareLogo.ico" />
+    @Styles.Render("~/Content/bootstrap.min.css")
+
+    @Styles.Render("~/Content/icofont.min.css")
+    @Styles.Render("~/Content/boxicons.min.css")
+    @Styles.Render("~/fonts/remixicon.css")
+    @Styles.Render("~/Content/venobox.css")
+    @Styles.Render("~/Content/aos.css")
+    @Styles.Render("~/Content/owl.carousel.min.css")
+    @Styles.Render("~/Content/style.css")
+    @Styles.Render("~/Content/jquery.dataTables.min.css")
+    @Styles.Render("~/Content/themes/base/jquery-ui.min.css")
+
+    @Styles.Render("~/Content/NewStyleSheet.css")
+
+
+
+    @* This is for the mapbox map. *@
+
+    <!-- <script src='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js'></script>
+     <link href='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' /> -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css" rel="stylesheet" />
+    @*This is used for the Geocoding Mapbox API*@
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css' type='text/css' />
+    <!-- Google Fonts -->
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css'>
+    <link rel="stylesheet" href='https://cdn.datatables.net/rowreorder/1.2.7/css/rowReorder.dataTables.min.css'>
+    <link rel="stylesheet" href='https://cdn.datatables.net/responsive/2.2.4/css/responsive.dataTables.min.css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css.map" />
+    <script src="https://kit.fontawesome.com/34c1b3fc06.js" crossorigin="anonymous"></script>
+
+</head>
+<body style="padding-top: 0px;
+        padding-bottom: 0px;">
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top d-flex align-items-center"
+           >
+
+        <br />
+        <div class="container d-flex align-items-center">
+            <div class="logo mr-auto">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <h1 class="text-light">
+                        <a href="/Home">
+                            <span><img style="height: 28px; width: 30px; border-radius: 30%;margin-right:5px;" src="~/img/CaringSquareLogo.png" />Caring Square</span>
+                        </a>
+                    </h1>
+                }
+                else
+                {
+
+                    <h1 class="text-light">
+                        <a href="/Home">
+                            <img style="height: 40px; width: 45px; border-radius: 30%;" src="~/img/CaringSquareLogo.png" />
+                            <span>Caring Square</span>
+                        </a>
+                    </h1>
+                }
+                <!-- Uncomment below if you prefer to use an image logo -->
+                <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+            </div>
+
+            <nav class="nav-menu d-none d-lg-block">
+                <ul>
+                    <li class="@(ViewBag.Title == "Home Page" ? "active" : "")">@Html.ActionLink("Home", "Index", "Home")</li>
+                    
+                    <li class="@(ViewBag.Title == "Knowledge Hub" ? "active" : "")">@Html.ActionLink("Knowledge Hub", "About", "Home")</li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="@(ViewBag.Title == "Explore Places" ? "active" : "")">@Html.ActionLink("Explore Places", "Index", "POIs")</li>
+                    }
+                    else
+                    {
+                        <li class="@(ViewBag.Title == "Explore Places" ? "active" : "")">@Html.ActionLink("Explore Places", "Index", "POIs")</li>
+                    }
+
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+
+                        <li class="@(ViewBag.Title == "Social Events" ? "active" : "")">@Html.ActionLink("Your Events", "Index", "SocialEvents")</li>
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "Dashboard" ? "active" : "")">@Html.ActionLink("Dashboard", "Dashboard", "Home")</li>
+                    }
+                    @Html.Partial("_LoginPartial")
+                </ul>
+
+            </nav><!-- .nav-menu -->
+
+        </div>
+    </header><!-- End Header -->
+
+    <div>
+        @RenderBody()
+        <hr />
+        <!-- ======= Footer ======= -->
+        <footer id="footer">
+            <div class="container">
+                <div class="copyright">
+                    &copy; Copyright <strong><span> CaringSquare @DateTime.Now.Year</span></strong>
+
+                    <div class="credits" style="font:10px">
+                        <!-- All the links in the footer should remain intact. -->
+                        <!-- You can delete the links only if you purchased the pro version. -->
+                        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/bootslander-free-bootstrap-landing-page-template/ -->
+                        &copy; Copyright <strong><span>Bootslander</span></strong>. All Rights Reserved<br />
+                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    </div>
+                </div>
+            </div>
+        </footer><!-- End Footer -->
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/Scripts/jquery-3.3.1.min.js")
+    @Scripts.Render("~/Scripts/jquery.dataTables.min.js")
+    @Scripts.Render("~/Scripts/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Scripts/jquery-ui-1.12.1.min.js")
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/bootstrap.bundle.js")
+    @Scripts.Render("~/Scripts/jquery.easing.min.js")
+
+
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    @Scripts.Render("~/Scripts/caringsquare.js")
+    @Scripts.Render("~/Scripts/venobox.min.js")
+    @Scripts.Render("~/Scripts/jquery.waypoints.min.js")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></script>
+    <script src="https://cdn.datatables.net/rowreorder/1.2.7/js/dataTables.rowReorder.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.4/js/dataTables.responsive.min.js"></script>
+
+
+    @Scripts.Render("~/Scripts/counterup.min.js")
+    @Scripts.Render("~/Scripts/owl.carousel.min.js")
+    @Scripts.Render("~/Scripts/aos.js")
+    @Scripts.Render("~/Scripts/main.js")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

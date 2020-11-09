@@ -1,0 +1,140 @@
+﻿@model IEnumerable<CaringSquareApp.Models.POIs>
+@{
+    ViewBag.Title = "Added Filter";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>AddFilter</h2>
+<br />
+<br />
+<br />
+<br />
+<div class="container">
+    <h2 id="freshtitle">List of Attractions Based on Filters</h2>
+    <div id="map" style="height:300px"></div>
+    <br />
+    <br />
+
+    <div class="text-center text-lg-right">
+        <h6 style="font-weight:bold;margin-bottom:20px;">Choose a Different Category:<a href="/POIs/Index" class="btn" style="background-color: #94d16a; margin-left:10px;margin-top:5px;margin-bottom:10px;font-weight:bold;">Go Back</a></h6>
+    </div>
+    <div class="text-center text-lg-left">
+        <h5 style="font-weight:bold;margin-bottom:20px;">
+            Result Based on Added Filters:
+        </h5>
+    </div>
+
+    <table class="table" id="myTable">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th hidden></th>
+                <th hidden> 
+                    @Html.DisplayNameFor(model => model.SubTheme)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.Latitude)
+                </th>
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.Longitude)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category)
+                </th>
+
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+
+            <tr class="coordinates">
+                <td class="description" hidden>
+                    @Html.DisplayFor(modelItem => item.Name)
+
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.SubTheme)
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+
+                <td class="latitude" hidden>
+                    @Html.DisplayFor(modelItem => item.Latitude)
+                </td>
+                <td class="longitude" hidden>
+                    @Html.DisplayFor(modelItem => item.Longitude)
+                </td>
+                <td>
+                    <strong style="font-size:1.2em">@Html.DisplayFor(modelItem => item.Name)</strong> <br />
+                    <i class="ri-information-line"></i>  @Html.DisplayFor(modelItem => item.SubTheme) <br />
+                    <i class="ri-map-pin-2-fill"></i>  @Html.DisplayFor(modelItem => item.Address) <br /><br />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    <a href="/POIs/Details/@item.PlaceId" style="background-color: #31943b; color: #ffffff; border-radius:50px" class="btn btn-default"><i class="ri-information-line"></i> View Detail</a>
+                    <a style="background-color: #0f15a3; color: #ffffff;  border-radius:50px" class="mapcentre btn"><i class="ri-road-map-fill"></i> Pin on Map</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+
+
+    </table>
+</div>
+
+<script>
+    window.onload = function () {
+        $('#myTable').DataTable();
+        $('#myTable tbody tr:even').css('background-color', '#94d16a');
+        var prevMapbox = null;
+
+        $('.mapcentre').on('click', function (e) {
+            var elementExists = document.getElementById("find-me");
+            var trsText = Array.from($(this).closest('tr').find('td').map((i, el) => $(el).text().trim()).slice(0, 3));
+            var placeName = trsText[0];
+            var placeName = $(this).closest('.coordinates').find('td').first().text().trim();
+            var loc = locations.find(item => item.description === placeName) || { longitude: 0, latitude: 0 };
+
+            prevMapbox?.remove()
+
+            map.flyTo({
+                center: [
+                    loc.longitude,
+                    loc.latitude
+                ],
+                essential: true // this animation is considered essential with respect to prefers-reduced-motion 
+            });
+
+            var coordinates = [loc.longitude, loc.latitude];
+
+            var mapboxHTML = trsText.map(t => `<p>${t}</p>`).join('');
+
+            prevMapbox = new mapboxgl.Popup()
+
+            prevMapbox.setLngLat(coordinates)
+                .setHTML(mapboxHTML)
+                .addTo(map);
+
+            $('html,body').animate({ scrollTop: 0 })
+
+        })
+    };
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/mapbox")
+}
+
+

@@ -1,0 +1,239 @@
+﻿@model IEnumerable<CaringSquareApp.Models.SocialEvent>
+
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Microsoft.AspNet.Identity
+
+
+@if (Request.IsAuthenticated)
+{
+
+    <br />
+    <br />
+    <main id="main">
+
+        <!-- WEATHER SECTION-->
+        <section id="pricing" class="pricing">
+            <div class="container">
+
+                <div class="section-title" data-aos="fade-up">
+                    @{
+                        var username = @User.Identity.GetUserName().Split('@');
+                    }
+                    <p>Hi, @username[0]</p>
+                </div>
+
+                <div class="row" data-aos="fade-left">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="box" data-aos="zoom-in" data-aos-delay="100">
+
+                            <i id="icon-weather" class="icofont-sunny" style="font-size:100px"></i>
+
+                            <h3 style="background-color:white">
+                                <span id="weather-temp" style="font-size:33px"></span><br />
+                                <br />
+                                Feels Like<br />
+                                <span id="weather-temp-like">22<sup>o</sup>C</span><br />
+
+                            </h3>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                            <h3 id="weather-desc">Weather</h3>
+                            <table style="text-align:left">
+                                <tr>
+                                    <td id="weather-desc-text" colspan="3" style="text-align:center"></td>
+                                </tr>
+                                <tr>
+                                    <td style="color:white">. </td>
+                                </tr>
+                                <tr>
+                                    <td>Humidity </td>
+                                    <td> : </td>
+                                    <td id="weather-humidity"></td>
+                                </tr>
+                                <tr>
+                                    <td>Pressure</td>
+                                    <td> : </td>
+                                    <td id="weather-pressure"></td>
+                                </tr>
+                                <tr>
+                                    <td>Wind Speed  </td>
+                                    <td> : </td>
+                                    <td id="weather-wind"></td>
+                                </tr>
+
+                            </table>
+                            <br />
+                            <br />
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="row" data-aos="fade-left">
+                    <div class="col-lg-12">
+                        <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="container">
+                                <div class="section-title" data-aos="fade-right">
+                                    <p style="font-size:24px"> <i class="ri-lightbulb-line"></i> Tip of the day </p>
+                                </div>
+                            </div>
+                            <p>
+                                “In order to "be a light" we need to "plug into" The Light!”
+                                ― Evinda Lepins, Back to Single
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- END CARD SECTION-->
+        <!-- ======= Testimonials Section ======= -->
+
+        <br /><br />
+        <div class="container">
+            <div class="section-title" data-aos="fade-right">
+                <h2>Events</h2>
+                <p>UP COMING EVENT</p>
+            </div>
+        </div>
+        
+        <section id="testimonials" class="testimonials">
+            <div class="container">
+
+                <div class="owl-carousel testimonials-carousel" data-aos="zoom-in">
+                    @foreach (var item in Model)
+                    {
+                    <div class="testimonial-item">
+                        <h3>@Html.DisplayFor(modelItem => item.EventName)</h3>
+                        <h4>@Html.DisplayFor(modelItem => item.EventDate)</h4>
+                        <h4>@Html.DisplayFor(modelItem => item.POIs.Address)</h4>
+                        <p>
+                            <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                            Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam
+                            <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                        </p>
+                    </div>
+                        
+                    }
+
+
+
+                </div>
+
+            </div>
+        </section><!-- End Testimonials Section -->
+        <!-- ======= Features Section ======= -->
+        <section id="features" class="features">
+            <div class="container">
+
+
+
+                <div class="row" data-aos="fade-left">
+                    <div class="col-lg-6 col-md-6">
+                        <br />
+
+                        <div class="icon-box" data-aos="zoom-in" data-aos-delay="50"
+                             onclick="window.location = '../SocialEvents';">
+                            <i class="ri-calendar-todo-line" style="color: #ffbb2c;"></i>
+                            <h3>Create Event</h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <br />
+                        <div class="icon-box" data-aos="zoom-in" data-aos-delay="100"
+                             onclick="window.location = '../FriendLists';">
+                            <i class="ri-team-fill" style="color: #5578ff;"></i>
+                            <h3>Friend List</h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <br />
+                        <div class="icon-box" data-aos="zoom-in" data-aos-delay="150">
+                            <i class="ri-checkbox-circle-line" style="color: #e80368;"></i>
+                            <h3>Getting Started</h3>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <br />
+                        <div class="icon-box" data-aos="zoom-in" data-aos-delay="200">
+                            <i class="ri-lightbulb-flash-line" style="color: #28a745;"></i>
+                            <h3>Knowledge Hub</h3>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section><!-- End Features Section -->
+
+    </main>
+    <script>
+        window.onload = function () {
+            get_weather();
+        };
+
+        function get_weather() {
+            $.get("https://api.openweathermap.org/data/2.5/weather?q=Melbourne,AU&appid=45b1b01ef280889b43b44defbb0933ad&units=metric", function (response) {
+                weather_id = response.weather[0].id;
+                if (parseInt(weather_id / 100) == 8) {
+                    if (weather_id == 801) {
+                        document.getElementById("icon-weather").className = "icofont-sunny";
+                    }
+                    else if (weather_id == 800) {
+                        document.getElementById("icon-weather").className = "icofont-sun";
+                    }
+                    else {
+                        document.getElementById("icon-weather").className = "icofont-cloudy";
+                    }
+                }
+                else if (parseInt(weather_id / 100) == 7) {
+                    if (response.weather[0].id == 781) {
+                        document.getElementById("icon-weather").className = "icofont-tornado";
+                    }
+                    else {
+                        document.getElementById("icon-weather").className = "icofont-dust";
+                    }
+                }
+                else if (parseInt(weather_id / 100) == 6) {
+                    if (response.weather[0].id < 615) {
+                        document.getElementById("icon-weather").className = "icofont-snow-flake";
+                    }
+                    else {
+                        document.getElementById("icon-weather").className = "icofont-hail-thunder";
+                    }
+                }
+                else if (parseInt(weather_id / 100) == 5) {
+                    document.getElementById("icon-weather").className = "icofont-rainy";
+                }
+                else if (parseInt(weather_id / 100) == 3) {
+                    document.getElementById("icon-weather").className = "icofont-rainy";
+                }
+                else if (parseInt(weather_id / 100) == 2) {
+                    document.getElementById("icon-weather").className = "icofont-rainy-thunder";
+                }
+
+                document.getElementById("weather-temp").innerHTML = parseInt(response.main.temp) + '<sup> o</sup> C';
+                document.getElementById("weather-temp-like").innerHTML = parseInt(response.main.feels_like) + '<sup> o</sup> C';
+                document.getElementById("weather-desc").innerHTML = response.weather[0].main;
+                document.getElementById("weather-desc-text").innerHTML = "" + response.weather[0].description + '<br />';
+                document.getElementById("weather-humidity").innerHTML = ' ' + response.main.humidity + '%';
+                document.getElementById("weather-pressure").innerHTML = response.main.pressure;
+                document.getElementById("weather-wind").innerHTML = ' ' + response.wind.speed;
+                console.log(response);
+            })
+        }
+
+    </script>
+}
+
+
+
+

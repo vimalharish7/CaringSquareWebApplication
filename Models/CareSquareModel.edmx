@@ -1,0 +1,536 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FriendLists">
+          <Key>
+            <PropertyRef Name="FriendId" />
+          </Key>
+          <Property Name="FriendId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserUserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Interests">
+          <Key>
+            <PropertyRef Name="InterestId" />
+          </Key>
+          <Property Name="InterestId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InterestName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UserUserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Participants">
+          <Key>
+            <PropertyRef Name="ParticipantId" />
+          </Key>
+          <Property Name="ParticipantId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserUserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="SocialEventEventId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="POIs">
+          <Key>
+            <PropertyRef Name="PlaceId" />
+          </Key>
+          <Property Name="PlaceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Theme" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="SubTheme" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Address" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Latitude" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Longitude" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Category" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PublicToilets">
+          <Key>
+            <PropertyRef Name="ToiletId" />
+          </Key>
+          <Property Name="ToiletId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="FemaleStatus" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="MaleStatus" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Accessibility" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Latitude" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Longitude" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="POIPlaceId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SocialEvents">
+          <Key>
+            <PropertyRef Name="EventId" />
+          </Key>
+          <Property Name="EventId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="EventDate" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="EventTime" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UserUserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="POIPlaceId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_POIPublicToilet">
+          <End Role="POIs" Type="Self.POIs" Multiplicity="1" />
+          <End Role="PublicToilets" Type="Self.PublicToilets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="POIs">
+              <PropertyRef Name="PlaceId" />
+            </Principal>
+            <Dependent Role="PublicToilets">
+              <PropertyRef Name="POIPlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_POISocialEvent">
+          <End Role="POIs" Type="Self.POIs" Multiplicity="1" />
+          <End Role="SocialEvents" Type="Self.SocialEvents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="POIs">
+              <PropertyRef Name="PlaceId" />
+            </Principal>
+            <Dependent Role="SocialEvents">
+              <PropertyRef Name="POIPlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SocialEventParticipant">
+          <End Role="SocialEvents" Type="Self.SocialEvents" Multiplicity="1" />
+          <End Role="Participants" Type="Self.Participants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SocialEvents">
+              <PropertyRef Name="EventId" />
+            </Principal>
+            <Dependent Role="Participants">
+              <PropertyRef Name="SocialEventEventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserFriendList">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="FriendLists" Type="Self.FriendLists" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FriendLists">
+              <PropertyRef Name="UserUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInterestList">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Interests" Type="Self.Interests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Interests">
+              <PropertyRef Name="UserUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserSocialEvent">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="SocialEvents" Type="Self.SocialEvents" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SocialEvents">
+              <PropertyRef Name="UserUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UsersParticipant">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Participants" Type="Self.Participants" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Participants">
+              <PropertyRef Name="UserUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FriendLists" EntityType="Self.FriendLists" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Interests" EntityType="Self.Interests" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Participants" EntityType="Self.Participants" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="POIs" EntityType="Self.POIs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PublicToilets" EntityType="Self.PublicToilets" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SocialEvents" EntityType="Self.SocialEvents" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_POIPublicToilet" Association="Self.FK_POIPublicToilet">
+            <End Role="POIs" EntitySet="POIs" />
+            <End Role="PublicToilets" EntitySet="PublicToilets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_POISocialEvent" Association="Self.FK_POISocialEvent">
+            <End Role="POIs" EntitySet="POIs" />
+            <End Role="SocialEvents" EntitySet="SocialEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SocialEventParticipant" Association="Self.FK_SocialEventParticipant">
+            <End Role="SocialEvents" EntitySet="SocialEvents" />
+            <End Role="Participants" EntitySet="Participants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserFriendList" Association="Self.FK_UserFriendList">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="FriendLists" EntitySet="FriendLists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInterestList" Association="Self.FK_UserInterestList">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Interests" EntitySet="Interests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserSocialEvent" Association="Self.FK_UserSocialEvent">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="SocialEvents" EntitySet="SocialEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UsersParticipant" Association="Self.FK_UsersParticipant">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Participants" EntitySet="Participants" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="FriendLists" Relationship="Self.FK_UserFriendList" FromRole="AspNetUsers" ToRole="FriendLists" />
+          <NavigationProperty Name="Interests" Relationship="Self.FK_UserInterestList" FromRole="AspNetUsers" ToRole="Interests" />
+          <NavigationProperty Name="SocialEvents" Relationship="Self.FK_UserSocialEvent" FromRole="AspNetUsers" ToRole="SocialEvents" />
+          <NavigationProperty Name="Participants" Relationship="Self.FK_UsersParticipant" FromRole="AspNetUsers" ToRole="Participants" />
+        </EntityType>
+        <EntityType Name="FriendList">
+          <Key>
+            <PropertyRef Name="FriendId" />
+          </Key>
+          <Property Name="FriendId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_UserFriendList" FromRole="FriendLists" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="Interest">
+          <Key>
+            <PropertyRef Name="InterestId" />
+          </Key>
+          <Property Name="InterestId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InterestName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_UserInterestList" FromRole="Interests" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="Participant">
+          <Key>
+            <PropertyRef Name="ParticipantId" />
+          </Key>
+          <Property Name="ParticipantId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SocialEventEventId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_UsersParticipant" FromRole="Participants" ToRole="AspNetUsers" />
+          <NavigationProperty Name="SocialEvent" Relationship="Self.FK_SocialEventParticipant" FromRole="Participants" ToRole="SocialEvents" />
+        </EntityType>
+        <EntityType Name="POIs">
+          <Key>
+            <PropertyRef Name="PlaceId" />
+          </Key>
+          <Property Name="PlaceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Theme" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SubTheme" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Latitude" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Longitude" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="PublicToilets" Relationship="Self.FK_POIPublicToilet" FromRole="POIs" ToRole="PublicToilets" />
+          <NavigationProperty Name="SocialEvents" Relationship="Self.FK_POISocialEvent" FromRole="POIs" ToRole="SocialEvents" />
+        </EntityType>
+        <EntityType Name="PublicToilet">
+          <Key>
+            <PropertyRef Name="ToiletId" />
+          </Key>
+          <Property Name="ToiletId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FemaleStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MaleStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Accessibility" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Latitude" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Longitude" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="POIPlaceId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="POIs" Relationship="Self.FK_POIPublicToilet" FromRole="PublicToilets" ToRole="POIs" />
+        </EntityType>
+        <EntityType Name="SocialEvent">
+          <Key>
+            <PropertyRef Name="EventId" />
+          </Key>
+          <Property Name="EventId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EventDate" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EventTime" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserUserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="POIPlaceId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_UserSocialEvent" FromRole="SocialEvents" ToRole="AspNetUsers" />
+          <NavigationProperty Name="Participants" Relationship="Self.FK_SocialEventParticipant" FromRole="SocialEvents" ToRole="Participants" />
+          <NavigationProperty Name="POIs" Relationship="Self.FK_POISocialEvent" FromRole="SocialEvents" ToRole="POIs" />
+        </EntityType>
+        <Association Name="FK_UserFriendList">
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1" />
+          <End Role="FriendLists" Type="Self.FriendList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FriendLists">
+              <PropertyRef Name="UserUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInterestList">
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1" />
+          <End Role="Interests" Type="Self.Interest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Interests">
+              <PropertyRef Name="UserUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserSocialEvent">
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1" />
+          <End Role="SocialEvents" Type="Self.SocialEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SocialEvents">
+              <PropertyRef Name="UserUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UsersParticipant">
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1" />
+          <End Role="Participants" Type="Self.Participant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Participants">
+              <PropertyRef Name="UserUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SocialEventParticipant">
+          <End Role="SocialEvents" Type="Self.SocialEvent" Multiplicity="1" />
+          <End Role="Participants" Type="Self.Participant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SocialEvents">
+              <PropertyRef Name="EventId" />
+            </Principal>
+            <Dependent Role="Participants">
+              <PropertyRef Name="SocialEventEventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_POIPublicToilet">
+          <End Role="POIs" Type="Self.POIs" Multiplicity="1" />
+          <End Role="PublicToilets" Type="Self.PublicToilet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="POIs">
+              <PropertyRef Name="PlaceId" />
+            </Principal>
+            <Dependent Role="PublicToilets">
+              <PropertyRef Name="POIPlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_POISocialEvent">
+          <End Role="POIs" Type="Self.POIs" Multiplicity="1" />
+          <End Role="SocialEvents" Type="Self.SocialEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="POIs">
+              <PropertyRef Name="PlaceId" />
+            </Principal>
+            <Dependent Role="SocialEvents">
+              <PropertyRef Name="POIPlaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CaringSquareEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
+          <EntitySet Name="FriendLists" EntityType="Self.FriendList" />
+          <EntitySet Name="Interests" EntityType="Self.Interest" />
+          <EntitySet Name="Participants" EntityType="Self.Participant" />
+          <EntitySet Name="POIs" EntityType="Self.POIs" />
+          <EntitySet Name="PublicToilets" EntityType="Self.PublicToilet" />
+          <EntitySet Name="SocialEvents" EntityType="Self.SocialEvent" />
+          <AssociationSet Name="FK_UserFriendList" Association="Self.FK_UserFriendList">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="FriendLists" EntitySet="FriendLists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInterestList" Association="Self.FK_UserInterestList">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Interests" EntitySet="Interests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserSocialEvent" Association="Self.FK_UserSocialEvent">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="SocialEvents" EntitySet="SocialEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UsersParticipant" Association="Self.FK_UsersParticipant">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Participants" EntitySet="Participants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SocialEventParticipant" Association="Self.FK_SocialEventParticipant">
+            <End Role="SocialEvents" EntitySet="SocialEvents" />
+            <End Role="Participants" EntitySet="Participants" />
+          </AssociationSet>
+          <AssociationSet Name="FK_POIPublicToilet" Association="Self.FK_POIPublicToilet">
+            <End Role="POIs" EntitySet="POIs" />
+            <End Role="PublicToilets" EntitySet="PublicToilets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_POISocialEvent" Association="Self.FK_POISocialEvent">
+            <End Role="POIs" EntitySet="POIs" />
+            <End Role="SocialEvents" EntitySet="SocialEvents" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="CaringSquareEntities">
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="Model.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FriendLists">
+            <EntityTypeMapping TypeName="Model.FriendList">
+              <MappingFragment StoreEntitySet="FriendLists">
+                <ScalarProperty Name="FriendId" ColumnName="FriendId" />
+                <ScalarProperty Name="UserUserId" ColumnName="UserUserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Interests">
+            <EntityTypeMapping TypeName="Model.Interest">
+              <MappingFragment StoreEntitySet="Interests">
+                <ScalarProperty Name="InterestId" ColumnName="InterestId" />
+                <ScalarProperty Name="InterestName" ColumnName="InterestName" />
+                <ScalarProperty Name="UserUserId" ColumnName="UserUserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Participants">
+            <EntityTypeMapping TypeName="Model.Participant">
+              <MappingFragment StoreEntitySet="Participants">
+                <ScalarProperty Name="ParticipantId" ColumnName="ParticipantId" />
+                <ScalarProperty Name="UserUserId" ColumnName="UserUserId" />
+                <ScalarProperty Name="SocialEventEventId" ColumnName="SocialEventEventId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="POIs">
+            <EntityTypeMapping TypeName="Model.POIs">
+              <MappingFragment StoreEntitySet="POIs">
+                <ScalarProperty Name="PlaceId" ColumnName="PlaceId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Theme" ColumnName="Theme" />
+                <ScalarProperty Name="SubTheme" ColumnName="SubTheme" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PublicToilets">
+            <EntityTypeMapping TypeName="Model.PublicToilet">
+              <MappingFragment StoreEntitySet="PublicToilets">
+                <ScalarProperty Name="ToiletId" ColumnName="ToiletId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="FemaleStatus" ColumnName="FemaleStatus" />
+                <ScalarProperty Name="MaleStatus" ColumnName="MaleStatus" />
+                <ScalarProperty Name="Accessibility" ColumnName="Accessibility" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="POIPlaceId" ColumnName="POIPlaceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SocialEvents">
+            <EntityTypeMapping TypeName="Model.SocialEvent">
+              <MappingFragment StoreEntitySet="SocialEvents">
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="EventName" ColumnName="EventName" />
+                <ScalarProperty Name="EventDate" ColumnName="EventDate" />
+                <ScalarProperty Name="EventTime" ColumnName="EventTime" />
+                <ScalarProperty Name="UserUserId" ColumnName="UserUserId" />
+                <ScalarProperty Name="POIPlaceId" ColumnName="POIPlaceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

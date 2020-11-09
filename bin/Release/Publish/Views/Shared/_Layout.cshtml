@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Caring Square</title>
+
+    @Styles.Render("~/Content/dataTables.bootstrap4.min.css")
+    @Styles.Render("~/Content/bootstrap.min.css")
+
+    @Styles.Render("~/Content/icofont.min.css")
+    @Styles.Render("~/Content/boxicons.min.css")
+    @Styles.Render("~/Content/fonts/remixicon.css")
+    @Styles.Render("~/Content/venobox.css")
+    @Styles.Render("~/Content/aos.css")
+    @Styles.Render("~/Content/owl.carousel.min.css")
+    @Styles.Render("~/Content/style.css")
+
+
+    @* This is for the mapbox map. *@
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
+    @*This is used for the Geocoding Mapbox API*@
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css' type='text/css' />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+</head>
+<body
+      style="padding-top: 0px;
+        padding-bottom: 0px;">
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top d-flex align-items-center"
+            style="background-color:#94D16A">
+        
+        <br />
+        <div class="container d-flex align-items-center">
+            <div class="logo mr-auto">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <h1 class="text-light"><a href="/Home/Dashboard"><span>CaringSquare</span></a></h1>
+                }
+                else
+                {
+                    <h1 class="text-light"><a href="/Home"><span>CaringSquare</span></a></h1>
+                }
+                <!-- Uncomment below if you prefer to use an image logo -->
+                <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+            </div>
+
+            <nav class="nav-menu d-none d-lg-block">
+                <ul>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Dashboard", "Dashboard", "Home")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Knowledge Hub", "About", "Home")</li>
+                    }
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Event Spots", "Index", "POIs")</li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+
+                        <li>@Html.ActionLink("Friends List", "Index", "FriendLists")</li>
+                        <li>@Html.ActionLink("Events List", "Index", "SocialEvents")</li>
+                        <li>@Html.ActionLink("Participant List", "Index", "Participants")</li>
+                    }
+                    @Html.Partial("_LoginPartial")
+                </ul>
+
+            </nav><!-- .nav-menu -->
+
+        </div>
+    </header><!-- End Header -->
+    <!--
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Caring Square", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Knowledge Hub", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Event Spots", "Index", "POIs")</li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+
+                        <li>@Html.ActionLink("Friends List", "Index", "FriendLists")</li>
+                        <li>@Html.ActionLink("Events List", "Index", "SocialEvents")</li>
+                        <li>@Html.ActionLink("Participant List", "Index", "Participants")</li>
+                    }
+
+                    @Html.Partial("_LoginPartial")
+                </ul>
+            </div>
+        </div>
+    </div>
+    -->
+    
+    <div>
+        @RenderBody()
+        <hr />
+            <!-- ======= Footer ======= -->
+            <footer id="footer">
+                <div class="container">
+                    <div class="copyright">
+                        &copy; Copyright <strong><span>Bootslander</span></strong>. All Rights Reserved
+                    </div>
+                    <div class="credits">
+                        <!-- All the links in the footer should remain intact. -->
+                        <!-- You can delete the links only if you purchased the pro version. -->
+                        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/bootslander-free-bootstrap-landing-page-template/ -->
+                        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                    </div>
+                    <div class="copyright">
+                        &copy; @DateTime.Now.Year - Caring Square
+                    </div>
+              
+                </div>
+                
+            </footer><!-- End Footer -->
+    </div>
+    
+  
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/bootstrap.bundle.js")
+    @Scripts.Render("~/Scripts/jquery.easing.min.js")
+
+    @Scripts.Render("~/Scripts/jquery.dataTables.min.js")
+    @Scripts.Render("~/Scripts/dataTables.bootstrap4.min.js")
+    @Scripts.Render("~/Scripts/caringsquare.js")
+    @Scripts.Render("~/Scripts/venobox.min.js")
+    @Scripts.Render("~/Scripts/jquery.waypoints.min.js")
+
+    @Scripts.Render("~/Scripts/counterup.min.js")
+    @Scripts.Render("~/Scripts/owl.carousel.min.js")
+    @Scripts.Render("~/Scripts/aos.js")
+    @Scripts.Render("~/Scripts/main.js")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

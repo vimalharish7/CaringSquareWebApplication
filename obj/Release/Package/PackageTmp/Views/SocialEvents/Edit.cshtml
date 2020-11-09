@@ -1,0 +1,295 @@
+﻿@model CaringSquareApp.Models.SocialEvent
+
+@{
+    ViewBag.Title = "Edit Social Event";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    table, td, th {
+        border: 1px solid white;
+        padding: 1px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th {
+        height: 50px;
+    }
+</style>
+<section id="faq" class="faq" style="">
+    <div class="container">
+
+        <div class="section-title" data-aos="fade-up" style="padding:0px">
+            <p>Edit Your Event</p>
+            <breadcrumbs><a href="/SocialEvents/">Event</a>  &nbsp; /&nbsp;    Edit Event</breadcrumbs>
+        </div>
+      <br />    
+        <div class="row">
+
+            <div class="col-lg-8" data-aos="fade-right" data-aos-delay="100">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal" style="font-weight: bold;margin-right:80px;">
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.EventId)
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.EventName, htmlAttributes: new { @class = "control-label col-md-12 required" })
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.EventName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.EventName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.POIPlaceId, "Place Name", htmlAttributes: new { @class = "control-label col-md-12 required" })
+                            <div class="row" style="padding:0px 15px">
+                                <div class="col-md-8">
+                                    @Html.DropDownList("POIPlaceId", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.POIPlaceId, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="/POIs" class="btn btn-default" style="display: block;color:#010483;background-color: #f7f7f7;border-color:#000000; font-weight:bold;"> Explore Places</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row" style="padding:0px 15px">
+                                <div class="col-md-7">
+                                    @Html.LabelFor(model => model.EventDate, htmlAttributes: new { @class = "control-label col-md-12 required", style = "padding:0px" })
+                                    @Html.EditorFor(model => model.EventDate, new { htmlAttributes = new { @class = "form-control", id = "datepicker1" } })
+                                    @Html.ValidationMessageFor(model => model.EventDate, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-5">
+                                    @Html.LabelFor(model => model.EventTime, htmlAttributes: new { @class = "control-label col-md-12 required", style = "padding:0px" })
+                                    @Html.EditorFor(model => model.EventTime, new { htmlAttributes = new { @class = "form-control", id = "timepicker1" } })
+                                    @Html.ValidationMessageFor(model => model.EventTime, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group" hidden>
+                            @Html.LabelFor(model => model.UserUserId, "User Name", htmlAttributes: new { @class = "control-label col-md-12" })
+                            <div class="col-md-12">
+                                @Html.DropDownList("UserUserId", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.UserUserId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-12">
+                                <br /><br /><br /><br />
+                                <input style="color:black;background-color:#94d16a;font-weight:bold;"type="submit"  class="btn" value="Save Changes" />
+                                @Html.ActionLink("Back to List", "Index", new { }, new { @class = "btn", @style = "color:#010483;background-color: #f7f7f7; border-color:#000000;font-weight:bold;" })
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-lg-4 col-md-6" data-aos="fade-right" data-aos-delay="100">
+                <div class="faq-list ">
+                    <h4 style="color:#01036f;font-weight:bold;">Weather Forecast:</h4>
+                    <ul>
+                        <li data-aos="fade-up">
+
+                            <div id="date-data"></div>
+
+                    </ul>
+                </div>
+                <div id="divResults">
+                </div>
+            </div>
+            <div>
+               
+            </div>
+        </div>
+
+    </div>
+
+    </section>
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }
+
+        <script>
+            window.onload = function () {
+                function weather_to_icon(weather_id) {
+                    var icon_text = "";
+                    if (parseInt(weather_id / 100) == 8) {
+                        if (weather_id == 801) {
+                            icon_text = "fas fa-sun";
+                        }
+                        else if (weather_id == 800) {
+                            icon_text = "fas fa-sun";
+                        }
+                        else {
+                            icon_text = "fas fa-cloud";
+                        }
+                    }
+                    else if (parseInt(weather_id / 100) == 7) {
+                        if (response.weather[0].id == 781) {
+                            icon_text = "ri-tornado-line";
+                        }
+                        else {
+                            icon_text = "ri-haze-2-fill";
+                        }
+                    }
+                    else if (parseInt(weather_id / 100) == 6) {
+                        if (response.weather[0].id < 615) {
+                            icon_text = "ri-snowy-fill";
+                        }
+                        else {
+                            icon_text = "fas fa-poo-storm";
+                        }
+                    }
+                    else if (parseInt(weather_id / 100) == 5) {
+                        icon_text = "fas fa-cloud-showers-heavy";
+                    }
+                    else if (parseInt(weather_id / 100) == 3) {
+                        icon_text = "fas fa-cloud-showers-heavy";
+                    }
+                    else if (parseInt(weather_id / 100) == 2) {
+                        icon_text = "ri-thunderstorms-fill";
+                    }
+                    return icon_text;
+                }
+                function get_weather() {
+                    $.get("https://api.openweathermap.org/data/2.5/forecast?q=Melbourne,AU&appid=45b1b01ef280889b43b44defbb0933ad&units=metric", function (response) {
+     
+
+                        var data = response.list;
+                        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+                        var dates = Array.from(new Set(data.map(item => item.dt_txt.slice(0, 10))));
+
+                        var str ='';
+                        var dateStrTime = '';
+                        var dateStrIcon = '';
+                        var dateStrTemp = '';
+                        var idx = -1;
+                        var tempDate = '';
+                        var hrefLink = '';
+                        var da = '';
+                        var mo = '';
+                        var minTemp = 100;
+                        var maxTemp = 0;
+                        for (var i = 0; i < data.length; i++) {
+
+                            var obj = data[i];
+                            var icon = weather_to_icon(obj.weather[0].id);
+                            var date = new Date(obj.dt_txt);
+                            var dataString = obj.dt_txt.slice(0, 10)
+
+                            if (date.getHours() < 6 || date.getHours() > 18) {
+                                continue;
+                            }
+                            if (dataString != dates[idx]) {
+                                // Set up footer
+                                if (tempDate != '') {
+                                    str = `
+                                    <li data-aos="fade-up">
+                                <a data-toggle="collapse" href="#${hrefLink}" class="collapsed" aria-expanded="true" aria-controls="${hrefLink}">
+                                <div class="row">
+                                    <div class="col-md-6" style="padding-bottom:15px">
+                                        <b>${hrefLink}</b><br>
+                                        ${da} ${mo}
+                                    </div>
+                                    <div class="col-md-6" style="padding-bottom:15px">
+                                        <h4 style='display:inline'>${minTemp}&deg;&nbsp;</h4><h4 style="display:inline"> ${maxTemp}&deg;</h4><br /><span style="font-size:.8em;">Min</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:.8em;">Max</span>
+                                    </div>
+                                </div>
+                                <i class="bx bx-chevron-down icon-show">
+                                </i><i class="bx bx-chevron-up icon-close"></i>
+                            </a> <div id="${hrefLink}" class="collapse">`
+                                        +`<p>
+                                        <table style="text-align:center;">` + '<tr>' + dateStrTime + '</tr>' + '<tr>' + dateStrIcon + '</tr>' + '<tr>' + dateStrTemp + '</tr>' + `</table></p></div></li>`;
+                                    $('#date-data').append(str);
+
+                                    // Reset
+                                    str = '';
+                                    minTemp = 100;
+                                    maxTemp = 0;
+                                    dateStrTime = '';
+                                    dateStrIcon = '';
+                                    dateStrTemp = '';
+
+                                }
+
+                                // Set up Header
+                                mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(date);
+                                da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(date);
+                                hrefLink = days[date.getDay()];
+
+                                str += ` `;
+                               
+                                tempDate = dataString;
+                                idx += 1;
+
+
+                            }
+                            currentHours = date.getHours();
+                            currentHours = ("0" + currentHours).slice(-2);
+                            dateStrTime += `<td>${currentHours}:00</td>`;
+                            dateStrIcon += `<td><i class="${icon}"></i></td>`;
+                            dateStrTemp += `<td>${parseInt(obj.main.temp)}&deg;</td>`;
+                            if (parseInt(obj.main.temp) < minTemp) {
+                                minTemp = parseInt(obj.main.temp);
+                            }
+                            if (parseInt(obj.main.temp) > maxTemp) {
+                                maxTemp = parseInt(obj.main.temp);
+                            }
+                        }
+                    });
+                }
+
+                get_weather();
+
+                $(document).on('click', '.date-btn', event => {
+                    var date = $(event.target).data().filterDate;
+                    $('#weather-data').children().addClass('d-none');
+                    $('#weather-data').children().filter(`[data-date=${date}]`).removeClass('d-none');
+                })
+
+                var place = new URL(location.href).searchParams.get('place');
+
+                if (typeof place === 'string') {
+                    document.getElementById('place-drop-down').value = place;
+                }
+
+                var date = new Date();
+                var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                var end = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+                $('#datepicker1').datepicker({
+                    format: "mm/dd/yyyy",
+                    todayHighlight: true,
+                    startDate: today,
+                    endDate: end,
+                    defaultDate: new Date(),
+                    minDate: 0,
+                    autoclose: true
+                });
+
+                $('#timepicker1').timepicker({
+                    timeFormat: "h:i  A",
+                    step: 60,
+
+                    minTime: '6',
+                    maxTime: '11:00pm',
+                    'forceRoundTime': false
+
+                });
+
+
+            }
+        </script>

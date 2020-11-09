@@ -1,0 +1,27 @@
+﻿@model CaringSquareApp.Models.FriendList
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 style = "font-weight: bold;margin-top:80px;margin-left:80px;margin-right:80px;">Details</h2>
+
+<div style = "font-weight: bold;margin-left:80px;margin-right:80px;">
+    <h4 style = "font-weight: bold;">FriendList</h4>
+    <hr />
+    <dl class="dl-horizontal" id="detailslist">
+        <dt>
+            @Html.DisplayNameFor(model => model.AspNetUser.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AspNetUser.Email)
+        </dd>
+
+    </dl>
+</div>
+<p style = "margin-bottom:80px;margin-left:80px;margin-right:80px;">
+    @Html.ActionLink("Edit", "Edit", new { id = Model.FriendId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

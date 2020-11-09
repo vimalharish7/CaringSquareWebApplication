@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "Weather";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Weather</h2>
+
+<p id="reply">
+    
+
+</p>
+<p id="temperature">
+
+
+</p>
+<p id="humidity">
+
+
+</p>
+<br>
+<br>
+<br>
+<br>
+<a class="btn btn-default" id="newbutton">
+    GET WEATHER
+</a>
+
+<script>
+    $(document).ready(function () {
+        $("#newbutton").click(function () {
+            $.get("https://api.openweathermap.org/data/2.5/weather?q=Melbourne,AU&appid=45b1b01ef280889b43b44defbb0933ad&units=metric", function (response) {
+                $("#reply").text(response.name);
+                $("#reply").text(response.main.temp);
+                console.log(response);
+            });
+        });
+    });
+</script>
+

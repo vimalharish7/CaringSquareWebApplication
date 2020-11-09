@@ -1,0 +1,43 @@
+@model IEnumerable<CaringSquareApp.Models.POIs>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var TempData = new List<string> { "cinema", "shopping", "sport","hangout","religious","museum","park","library","bbq" };
+    var TempIcon = new List<string> { "ri-book-open-line","ri-film-line","ri-basketball-line","ri-walk-line","ri-ancient-pavilion-line","ri-bank-line","ri-footprint-line","ri-shopping-bag-line","ri-restaurant-fill"};
+}
+<br />
+<br />
+<br />
+<br />
+<div class="container">
+    <div class="section-title" data-aos="fade-right" style="padding:0px">
+        <h2></h2>
+        <p>Spots Category</p>
+    </div>
+    <section id="features" class="features" style="padding:15px">
+        <div class="container">
+            <div class="row" data-aos="fade-left">
+            @{
+                var idx = 0;
+            }
+            @foreach (var item in TempData)
+            {
+                idx++;
+            <div class="col-lg-3 col-md-4" style="margin-top: 30px">
+                <div class="icon-box" data-aos="zoom-in" data-aos-delay="50"
+                     onclick="window.location = 'POI/@idx';">
+                    <i class="@TempIcon[idx-1]" style="color: #ffbb2c;"></i>
+                    <h3>@item</h3>
+                </div>
+            </div>
+            }
+                </div>
+            </div>
+        </section>
+    </div>
+<script>
+    window.onload = function () {
+        $('#myTable').DataTable();
+    };
+</script>         

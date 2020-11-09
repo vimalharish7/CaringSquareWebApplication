@@ -1,0 +1,132 @@
+﻿.heading1 {
+    font-family: sans-serif;
+    text-align: left;
+    color: #fff;
+    font-weight: bold;
+    font-size: 4em;
+    background-size: cover;
+    text-shadow: 2px 2px 8px #404040;
+}
+
+.heading2 {
+    font-family: sans-serif;
+    text-align: left;
+    color: #fff;
+    font-weight: bold;
+    font-size: 4em;
+    background-size: cover;
+    text-shadow: 2px 2px 8px #404040;
+}
+
+h1, h2, h3, h4, h5, h6, label, p {
+    font-family: sans-serif;
+    color: #fff;
+}
+
+a {
+    color: #0fc3fa;
+}
+
+.boldwhite {
+    font-family: sans-serif;
+    color: #ffffff;
+}
+
+#detailslist {
+    font-size: medium;
+    font-family: sans-serif;
+    color: #ffffff;
+}
+
+.dataTables_info {
+    color: #fff;
+}
+
+
+.table {
+    background-color: #fff;
+}
+
+.body-content {
+    background-color: #2e4663;
+}
+
+.copyright {
+    color: #fff;
+}
+
+h4 {
+    font-family: sans-serif;
+}
+
+.block {
+    position: relative;
+    display: inline-block;
+}
+
+.row-image {
+    position: relative;
+    height: 250px;
+}
+
+    .row-image strong {
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 24px;
+        font-size: 24px;
+        color: #fff;
+        text-shadow: 1px 1px 4px #404040;
+    }
+
+.small_img {
+    width: 200px;
+    height: 200px;
+}
+
+a {
+    font-size: medium;
+    font-weight: bold;
+}
+
+.block .image {
+    width: 75%;
+    height: auto;
+}
+
+.block .text {
+    width: 100%;
+    height: auto;
+}
+
+.navbar-inverse {
+    background-color: #404040;
+    font-weight: bold;
+}
+
+    .navbar-inverse .navbar-brand {
+        font-family: sans-serif;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .navbar-inverse .navbar-nav > li > a {
+        font-family: sans-serif;
+        color: #fff;
+        font-weight: bold;
+    }
+
+.jumbotron {
+    background-image: url('https://images.unsplash.com/photo-1533444273691-ebf51af8fd9c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1934&q=80');
+    background-size: 100% 100%;
+    width: 100%;
+    height: 600px;
+    background-size: cover;
+}
+
+
+.img-thumbnail {
+    width: 100%;
+    height: inherit;
+    object-fit: cover;
+}

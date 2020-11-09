@@ -1,0 +1,112 @@
+﻿@model CaringSquareApp.Models.SendEmailViewModel
+
+@{
+    ViewBag.Title = "Send Email";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <section>
+        <div class="container" style="">
+            <h2 id="freshtitle">Share Event by Email</h2>
+            <hr>
+            <h2 style="font-size: 12px;color:#010483;font-weight:bold;padding: 0;line-height: 1px;margin-bottom:20px;text-transform: uppercase;"><i class="fas fa-info-circle" style="color:#010483;font-size: 1.4em;margin-right:3px;"></i>Enter recepient email address</h2>
+            <h2 style="font-size: 12px;color:#010483;font-weight:bold;padding: 0;line-height: 1px;margin-bottom:20px;text-transform: uppercase;"><i class="fas fa-info-circle" style="color:#010483;font-size: 1.4em;margin-right:3px;"></i>Subject is prefilled for your convenience, feel free to update</h2>
+            <h2 style="font-size: 12px;color:#010483;font-weight:bold;padding: 0;line-height: 1px;margin-bottom:20px;text-transform: uppercase;"><i class="fas fa-info-circle" style="color:#010483;font-size: 1.4em;margin-right:3px;"></i>Content with Event Details is prefilled for your convenience, feel free to update sender and receiver names</h2>
+
+            @using (Html.BeginForm("Send_Email", "SocialEvents", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+
+
+                if (@ViewBag.Result != null)
+                {
+                    <div class="alert alert-info">@ViewBag.Result</div>
+                }
+
+                <div class="form-horizzontal" style="font-weight: bold;margin-right:80px;">
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ToEmail, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ToEmail, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter the recipient email eg. abc@xyz.com" } })
+                            @Html.ValidationMessageFor(model => model.ToEmail, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Subject, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <input class="form-control text-box single-line" data-val="true" data-val-required="Please enter a subject." id="Subject" name="Subject" type="text" value="Invitation for Social event">
+                            @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Contents, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <textarea style="height:300px;" class="form-control" cols="20" data-val="true" data-val-required="Please enter the contents" id="Contents" name="Contents" rows="2">
+                        </textarea>
+                            @Html.ValidationMessageFor(model => model.Contents, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" style="background-color:#94d16a;font-weight:bold;color:#000000;margin-top:10px;" value="Send Email" class="btn btn-default" />
+                        </div>
+                        <br />
+                    </div>
+                </div>
+            }
+
+            <div>
+                @Html.ActionLink("Back to Event List Page", "Index", new { }, new { @class = "btn", @style = "color:#010483;background-color: #f7f7f7; border-color:#000000;font-weight:bold;" })
+
+            </div>
+        </div>
+        </section>
+        <script>
+
+
+            function init() {
+                var result = document.getElementById('Contents');
+
+                result.value = `Dear <b style="colour:#54a6d6;">[Update Recipient Name]</b>,<br/>
+                 Please find below the details of the Social Event. I would like to invite you to join me for the same.<br/>
+                 Regards,<br/>
+                 <b style="colour:#54a6d6;">[Update Sender Name]</b><br/><br/>`;
+
+                var text = "";
+
+                try {
+                    var textArray = JSON.parse(localStorage.getItem('__pageCache1'));
+                    textArray = textArray[0].split('\n').map(g => g.trim()).filter(Boolean);
+
+
+                    for (var i = 0; i < textArray.length; i += 2) {
+                        text += `<strong>${textArray[i]}</strong>:  ${textArray[i + 1]} <br/>\n`
+
+                    }
+                } catch (err) {
+                }
+
+
+                result.value += `\n ${text}`
+
+            }
+
+
+            window.addEventListener('DOMContentLoaded', event => {
+                init();
+            });
+        </script>
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            <script>
+                tinymce.init({
+                    selector: '#Contents'
+                });
+            </script>
+        }

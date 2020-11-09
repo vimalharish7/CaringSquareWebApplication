@@ -1,0 +1,409 @@
+﻿@model CaringSquareApp.Models.SocialEvent
+
+@{
+    ViewBag.Title = "Event Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Microsoft.AspNet.Identity
+
+
+<section id="contact" class="contact" hidden>
+    <div class="container">
+        
+
+        <div id="element">
+            <hr />
+            <dl class="dl-horizontal" id="detailslist">
+                <dt style="padding: 0 0 0 60px;font-size: 22px;font-weight: 600;margin-bottom: 5px;color: #010483;">
+                    @Html.DisplayNameFor(model => model.EventName)
+                </dt>
+
+                <dd style="color: #444;font-weight:bold;padding: 0 0 0 70px;">
+                    @Html.DisplayFor(model => model.EventName)
+                </dd>
+
+                <dt style="padding: 0 0 0 60px;font-size: 22px;font-weight: 600;margin-bottom: 5px;color: #010483;">
+                    @Html.DisplayNameFor(model => model.EventDate)
+                </dt>
+
+                <dd style="color: #444;font-weight:bold;padding: 0 0 0 70px;">
+                    @Html.DisplayFor(model => model.EventDate)
+                </dd>
+
+                <dt style="padding: 0 0 0 60px;font-size: 22px;font-weight: 600;margin-bottom: 5px;color: #010483;">
+                    @Html.DisplayNameFor(model => model.EventTime)
+                </dt>
+
+                <dd style="color: #444;font-weight:bold;padding: 0 0 0 70px;">
+                    @Html.DisplayFor(model => model.EventTime)
+                </dd>
+
+                <dt style="padding: 0 0 0 60px;font-size: 22px;font-weight: 600;margin-bottom: 5px;color: #010483;">
+                    @Html.DisplayNameFor(model => model.AspNetUser.Email)
+                </dt>
+
+                <dd style="color: #444;font-weight:bold;padding: 0 0 0 70px;">
+                    @Html.DisplayFor(model => model.AspNetUser.Email)
+                </dd>
+
+                <dt style="padding: 0 0 0 60px;font-size: 22px;font-weight: 600;margin-bottom: 5px;color: #010483;">
+                    @Html.DisplayNameFor(model => model.POIs.Name)
+                </dt>
+
+                <dd style="color: #444;font-weight:bold;padding: 0 0 0 70px;">
+                    @Html.DisplayFor(model => model.POIs.Name, new { id = "PlaceName" })
+                </dd>
+
+                <dt style="padding: 0 0 0 60px;font-size: 22px;font-weight: 600;margin-bottom: 5px;color: #010483;">
+                    @Html.DisplayNameFor(model => model.POIs.Address)
+                </dt>
+
+                <dd style="color: #444;font-weight:bold;padding: 0 0 0 70px;">
+                    @Html.DisplayFor(model => model.POIs.Address, new { id = "PlaceAddress" })
+                </dd>
+
+            </dl>
+        </div>
+
+        <div>
+            <a href="/SocialEvents/Send_Email" id="share-event1" class="btn" style="background-color: #94d16a; margin-left:60px;font-weight:bold;">Share Event By Email</a>
+            <br /><br />
+
+        </div>
+
+        <p>
+            @Html.ActionLink("Edit This Event", "Edit", new { id = Model.EventId }, new { @class = "btn", @style = "color:#010483;background-color: #f7f7f7; border-color:#000000;margin-left:10px;font-weight:bold;" })
+            <a href="/SocialEvents" class="btn" style="color:#010483; background-color:#f7f7f7; border-color:#000000;margin-left:10px;font-weight:bold;">Back to Event List</a>
+        </p>
+
+
+    </div>
+</section>
+<section id="contact" class="contact">
+    <div class="container">
+        <div class="section-title aos-init aos-animate" data-aos="fade-up">
+            <p>Share your Event</p>
+            <h2>Share by Email or Facebook</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-5 mt-5 mt-lg-0" data-aos="fade-left" data-aos-delay="200">
+
+                <div id="map" style="height:300px"></div>
+            </div>
+            <div class="col-lg-7" data-aos="fade-right" data-aos-delay="100">
+                <div class="section-title" data-aos="fade-up">
+
+                    <p>@Html.DisplayFor(model => model.EventName)</p>
+                    <p style="font-size:1em">By: @Html.DisplayFor(model => model.AspNetUser.Email.Split('@')[0])</p>
+                </div>
+                <div class="info">
+                    <div class="address">
+                        <i class="ri-map-2-fill"></i>
+                        <h4 class="main_name">@Html.DisplayFor(model => model.POIs.Name)</h4>
+                        <h4 style="font-size:1em">@Html.DisplayFor(model => model.POIs.Address)</h4>
+                        <p hidden class="main_lat">@Html.DisplayFor(model => model.POIs.Latitude)</p>
+                        <p hidden class="main_lon">@Html.DisplayFor(model => model.POIs.Longitude)</p>
+                    </div>
+                </div>
+                <div class="info">
+                    <div class="email">
+                        <i class="ri-calendar-event-line"></i>
+                        <h4>@Html.DisplayFor(model => model.EventDate)</h4>
+                        <h4 style="font-size:1em">@Html.DisplayFor(model => model.EventTime)</h4>
+                    </div>
+                </div>
+                <div class="features" hidden>
+
+                    @foreach (var item in Model.POIs.PublicToilets)
+                    {
+                        var feature_name = item.Name.Split(new[] { '-' }, 2);
+                        var final_name = "";
+                        if (feature_name[0] == "Public Toilet ")
+                        {
+                            if (feature_name[1].StartsWith(" Toile"))
+                            {
+                                var feature_name_split = feature_name[1].Split(new[] { '-' }, 2);
+                                final_name = feature_name_split[1];
+                            }
+                            else
+                            {
+                                final_name = feature_name[1];
+                            }
+                            <div class="coordinates">
+                                <p hidden class="toilet_name">T- @final_name </p>
+                                <p hidden class="latitude">@item.Latitude</p>
+                                <p hidden class="longitude"> @item.Longitude</p>
+                            </div>
+                        }
+
+
+                    }
+
+                    @foreach (var item in Model.POIs.PublicToilets)
+                    {
+                        var feature_name = item.Name.Split(new[] { '-' }, 2);
+                        var final_name = "";
+                        if (feature_name[0] != "Public Toilet ")
+                        {
+                            final_name = feature_name[1];
+                            <div class="coordinates">
+                                <p hidden class="toilet_name">W- @final_name </p>
+                                <p hidden class="latitude">@item.Latitude</p>
+                                <p hidden class="longitude"> @item.Longitude</p>
+                            </div>
+                        }
+                    }
+                </div>
+                <br />
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div>
+                        <a href="/SocialEvents/Send_Email" id="share-event" class="btn" style="background-color: #94d16a; margin-right:20px;margin-left:60px;font-weight:bold;"> <i class="ri-share-line"></i> Share by Email</a>
+                        <a href="/SocialEvents/Share_Facebook" id="share-event-fb" class="btn" style="background-color: #4267B2;color:aliceblue; margin-right:20px;margin-left:60px;font-weight:bold;"> <i class="fab fa-facebook"></i> Share by Facebook</a>
+
+                    </div>
+                }
+
+            </div>
+
+
+        </div>
+        <br /><br />
+        <br /><br />
+        @if (User.Identity.IsAuthenticated)
+        {
+            <p>
+                @Html.ActionLink("Edit This Event", "Edit", new { id = Model.EventId }, new { @class = "btn", @style = "color:#010483;background-color: #f7f7f7; border-color:#000000;margin-left:10px;font-weight:bold;" })
+                <a href="/SocialEvents" class="btn" style="color:#010483; background-color:#f7f7f7; border-color:#000000;margin-left:10px;font-weight:bold;">Back to Event List</a>
+            </p>
+        }
+        else
+        {
+            <main id="main">
+                <section id="pricing" class="pricing" style="padding:50px">
+                    <div class="container">
+                        <div class="section-title" style="padding:0px">
+                            <h2>How can we help</h2>
+                            <p>Our Features</p>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 ">
+                                <div class="box" style="margin-top: 30px">
+
+                                    <h2 id="headingedit2">Dashboards</h2>
+                                    <br />
+                                    <img style="width:200px;" src="~/img/Dashboard.jpg" />
+                                    <p id="paragraphedit2">Keep track of upcoming Events so you don't miss them.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 ">
+                                <div class="box" style="margin-top: 30px">
+
+                                    <h2 id="headingedit2">Create Events</h2>
+                                    <br />
+                                    <img style="width:200px;" src="~/img/Events.jpg" />
+                                    <p id="paragraphedit2">Create Social Events and share the same with your friends.    </p>
+
+
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6 ">
+                                <div class="box" style="margin-top: 30px">
+
+                                    <h2 id="headingedit2">Share Events</h2>
+                                    <br />
+                                    <img style="width:200px;" src="~/img/Friends.jpg" />
+                                    <p id="paragraphedit2">Share your Social Events with friends. Invite them to your Events.        </p>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </section>
+            </main>
+        }
+    </div>
+
+</section>
+
+<script>
+
+
+    window.onload = function () {
+        /**
+    * This is a simple JavaScript demonstration of how to call MapBox API to load the maps.
+    * I have set the default configuration to enable the geocoder and the navigation control.
+    * https://www.mapbox.com/mapbox-gl-js/example/popup-on-click/
+    * Copyrights Holder - Credits for the code
+    * author Jian Liew <jian.liew@monash.edu>
+    */
+        const TOKEN = "pk.eyJ1IjoiaGFyaXNoMTE1MCIsImEiOiJjazFndDJxMHMwMXBtM2JqdWNqMmpkdWozIn0.yspP5Uu6LV65-0HgIpNVUw";
+        var locations = [];
+        // The first step is obtain all the latitude and longitude from the HTML
+        // The below is a simple jQuery selector
+        $(".coordinates").each(function () {
+            var longitude = $(".longitude", this).text().trim();
+            var latitude = $(".latitude", this).text().trim();
+            var description_obj = $(".toilet_name", this).text().trim().split(/-(.+)/);
+  
+            var description = description_obj[1];
+            var item_icon = "circle-15";
+            if (description_obj[0] == "W") {
+                item_icon = "drinking-water-15";
+            }
+            else if (description_obj[0] == "T") {
+                item_icon = "toilet-15";
+            }
+            // Create a point data structure to hold the values.
+            var point = {
+                "latitude": latitude,
+                "longitude": longitude,
+                "description": description,
+                "item_icon": item_icon
+            };
+            // Push them all into an array.
+            locations.push(point);
+        });
+
+        var sum_lat = 0;
+        var sum_lon = 0;
+
+        for (var i = 0; i < locations.length; i++) {
+            sum_lat += parseFloat(locations[i].latitude, 10);
+            sum_lon += parseFloat(locations[i].longitude, 10);
+        };
+        var map_center_lat = parseFloat(sum_lat / locations.length)
+        var map_center_lon = parseFloat(sum_lon / locations.length)
+
+        var data = [];
+
+
+        for (i = 0; i < locations.length; i++) {
+            var feature = {
+                "type": "Feature",
+                "properties": {
+                    "description": locations[i].description,
+                    "icon": locations[i].item_icon
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [locations[i].longitude, locations[i].latitude]
+                }
+            };
+            data.push(feature)
+
+        }
+        // Add the POI
+        var main_feature = {
+            "type": "Feature",
+            "properties": {
+                "description": $(".main_name").text(),
+                "icon": "circle-15"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [$(".main_lon").text(), $(".main_lat").text()]
+            }
+        };
+        data.push(main_feature);
+
+
+        mapboxgl.accessToken = TOKEN;
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v10',
+            zoom: 14,
+            center: [map_center_lon, map_center_lat]
+        });
+        map.on('load', function () {
+            // Add a layer showing the places.
+            map.addLayer({
+                "id": "places",
+                "type": "symbol",
+                "source": {
+                    "type": "geojson",
+                    "data": {
+                        "type": "FeatureCollection",
+                        "features": data
+                    }
+                },
+                "layout": {
+                    "icon-image": "{icon}",
+                    "icon-allow-overlap": true
+                }
+            });
+
+            map.addControl(new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken
+            }));;
+            map.addControl(new mapboxgl.NavigationControl());
+            // When a click event occurs on a feature in the places layer, open a popup at the
+            // location of the feature, with description HTML from its properties.
+            map.on('click', 'places', function (e) {
+
+                var coordinates = e.features[0].geometry.coordinates.slice();
+                var description = e.features[0].properties.description;
+
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+                new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setHTML(description)
+                    .addTo(map);
+            });
+            // Change the cursor to a pointer when the mouse is over the places layer.
+            map.on('mouseenter', 'places', function () {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+            // Change it back to a pointer when it leaves.
+            map.on('mouseleave', 'places', function () {
+                map.getCanvas().style.cursor = '';
+            });
+        });
+
+        init1();
+        init2();
+
+    }
+
+    function init1() {
+        document.getElementById('share-event').addEventListener('click', event => {
+            event.preventDefault();
+
+            const dd = [...document.querySelectorAll('dl')].map(el => el.textContent).filter(Boolean).map(s => s.trim());
+
+            localStorage.setItem('__pageCache1', JSON.stringify(dd));
+
+            document.location.href = event.target.getAttribute('href')
+        });
+    }
+
+    function init2() {
+        document.getElementById('share-event-fb').addEventListener('click', event => {
+            event.preventDefault();
+
+            const dd = [...document.querySelectorAll('dl')].map(el => el.textContent).filter(Boolean).map(s => s.trim());
+
+            var str = JSON.stringify(dd);
+            var base64Str = btoa(str);
+
+            document.location.href = event.target.getAttribute('href') + `?data=${base64Str}`
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', event => {
+    });
+
+</script>
